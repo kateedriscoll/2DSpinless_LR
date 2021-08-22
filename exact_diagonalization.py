@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-print("hello world")
-print("inserted in insert mode in vim")
-print("want to make a branch")
-
+import numpy, sys
 from inspect import getmembers, isfunction
+import config
 import initialization
 
-print(getmembers(initialization,isfunction))
-
-global InvDist
-InvDist = initialization.CreateEwald(6)
-
-initialization.CreateLattice( 9, 1, 2 )
+#print(getmembers(initialization,isfunction))
+config.Alpha = 1.
+initialization.CreateLattice( nx=2, d=2, z=6 )
+initialization.CreateEwald()
+initialization.CreateBasis( config.ns / 2 )
+print(config.Basis.shape)
