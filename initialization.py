@@ -173,6 +173,24 @@ def CreateEwald() :
 
         config.InvDist[ site ] = const_A * sum_A + const_B * sum_B + const_C
 
+    config.MatrixDist = numpy.zeros( ( config.ns , config.ns ) , dtype = 'float'  )
+
+    if config.Dimensions == 1 :
+        for s0 in numpy.arange( config.ns ):
+            for s1 in numpy.arange( config.ns ):
+                if s1 != s0 :
+                    MatrixDist[ s0, s1 ] = config.InvDist[ ( s1 - s0 ) % config.ns ]
+    elif config.Dimensions == 2 :
+        for s0 in numpy.arange( config.ns ):
+            for s1 in numpy.arange( config.ns ):
+                if s1 != s0 :
+                    newsite = s1
+                    for b in numpy.arange( 0 , s0 %  config.lx ) : newsite = config.Neighbors[ newsite , 2 ] ;
+                    for b in numpy.arange( 0 , s0 // config.lx ) : newsite = config.Neighbors[ newsite , 3 ] ;
+                    config.MatrixDist[ s0 , s1  ] = config.InvDist[ newsite ]
+    else :
+        print("wrong dimensions for config.MatrixDist")
+
 # create Basis of states with np particles
 def CreateBasis( np ) :
     config.np = np

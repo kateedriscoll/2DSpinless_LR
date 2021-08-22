@@ -37,11 +37,12 @@ lx = 0
 # neighbors table
 Neighbors = 0
 
-# inverse distance table
+# inverse distance table and Matrix of inverse distances
 InvDist = 0
+MatrixDist = 0
 
 # number of paritcles
 np = 0
 
 # basis of states
-Basis = 0 
+Basis = 0
