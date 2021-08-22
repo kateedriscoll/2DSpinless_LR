@@ -8,7 +8,9 @@ print("want to make a branch")
 from inspect import getmembers, isfunction
 import initialization
 
-#print(getmembers(initialization,isfunction))
+print(getmembers(initialization,isfunction))
 
 global InvDist
-InvDist = initialization.Ewald(6)
+InvDist = initialization.CreateEwald(6)
+
+initialization.CreateLattice( 9, 1, 2 )
