@@ -28,11 +28,12 @@ q2 = numpy.array( [ 0, 0, 0 ] )
 # number of sites
 ns = 0
 
-# number of sites along one direction
+# linear size of system to set cluster translation vectors
 nx = 0
 
-# length of one side
+# length of sites along x or y direction
 lx = 0
+ly = 0
 
 # neighbors table
 Neighbors = 0

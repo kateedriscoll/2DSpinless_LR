@@ -30,6 +30,7 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.R0 , config.R1 )[ 2 ]
         # linear size
         config.lx = config.ns
+        config.ly = 0
 
     elif d==2 and z==4 :
         print("2d square lattice, coordination number: " , z )
@@ -52,6 +53,7 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.T0 , config.T1 )[ 2 ]
         # linear size
         config.lx = config.ns // config.nx
+        config.ly = config.ns // config.nx
 
     elif d==2 and z==6 :
         print("2d triangular lattice, coordination number: " , z )
@@ -74,6 +76,8 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.T0 , config.T1 )[ 2 ]
         # linear size
         config.lx = config.ns // config.nx
+        config.ly = config.ns // config.lx
+        print( "lx: ", config.lx, " ly: ", config.ly )
     else :
         print("have not set up this lattice type yet")
         sys.exit()
@@ -179,7 +183,8 @@ def CreateEwald() :
         for s0 in numpy.arange( config.ns ):
             for s1 in numpy.arange( config.ns ):
                 if s1 != s0 :
-                    MatrixDist[ s0, s1 ] = config.InvDist[ ( s1 - s0 ) % config.ns ]
+                    config.MatrixDist[ s0, s1 ] = config.InvDist[ numpy.abs( s1 - s0 ) ]
+                    #config.MatrixDist[ s0, s1 ] = config.InvDist[ ( s1 - s0 ) % config.ns ]
     elif config.Dimensions == 2 :
         for s0 in numpy.arange( config.ns ):
             for s1 in numpy.arange( config.ns ):
