@@ -15,4 +15,11 @@ def Diagonalization( Ham , method ) :
         print("unknown diagonalization method")
         sys.exit()
 
-    return evals[ 0 ]
+    elem = numpy.argsort( evals )
+    evals = evals[ elem ]
+    evecs = evecs[ :, elem ]
+
+    E0 = evals[ 0 ]
+    Psi0 = evecs[ :, 0 ]
+
+    return E0, Psi0

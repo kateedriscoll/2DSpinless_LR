@@ -203,3 +203,13 @@ def CreateBasis( np ) :
     FullHilbertSpace = numpy.array( list( product( (0,1) , repeat = config.ns )  ) )
     # reduce the size of the Hilbert space to fixed particle sector
     config.Basis = FullHilbertSpace[ numpy.where( numpy.sum( FullHilbertSpace[ : ] , axis=1 ) == config.np ) ]
+
+# create suffix for storing all data in consistent manner
+def CreateSuffix( V, NFluxes ) :
+    if config.Dimensions == 1 :
+        config.Suffix = "_" + str( config.Dimensions ) + "d_z" + str( config.Connectivity ) + "_nx" + str( config.nx ) + "_ns" + str( config.ns) + "_np" + str( config.np ) + "_a" + str( config.Alpha ) + "_V" + str( V ) + "_NFlux" + str( NFluxes ) + ".dat"
+    elif config.Dimensions == 2 :
+        config.Suffix = "_" + str( config.Dimensions ) + "d_z" + str( config.Connectivity ) + "_nx" + str( config.nx ) + "_ns" + str( config.ns) + "_np" + str( config.np ) + "_a" + str( config.Alpha ) + "_V" + str( V ) + "_NFlux" + str( NFluxes*NFluxes ) + ".dat"
+    else :
+        print("Wrong dimensions to create file names")
+        sys.exit()

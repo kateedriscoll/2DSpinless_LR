@@ -1,5 +1,6 @@
 import numpy
 
+Suffix = 0
 Alpha = 0
 
 Connectivity = 0
