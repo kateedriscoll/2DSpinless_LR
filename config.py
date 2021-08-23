@@ -51,3 +51,7 @@ np = 0
 
 # basis of states
 Basis = 0
+
+# directions for computing the Drude weight
+udir = 0
+vdir = 0
