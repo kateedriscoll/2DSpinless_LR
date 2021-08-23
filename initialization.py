@@ -213,3 +213,20 @@ def CreateSuffix( V, NFluxes ) :
     else :
         print("Wrong dimensions to create file names")
         sys.exit()
+
+# create Phi matrix containing ikr
+def CreatePhiMatrix() :
+    # define r and q lists
+    config.PhiMatrix = numpy.zeros( ( config.ns , config.ns ) , dtype = 'complex128' )
+    if config.Dimensions == 1 :
+        for q in numpy.arange( config.ns ) :
+            for r in numpy.arange( config.ns ) :
+                Listr = ( r % config.lx ) * config.u0
+                Listq = ( q % config.lx ) * config.q0
+                config.PhiMatrix[ q , r ] = numpy.exp( 1.0j * numpy.dot( Listq , Listr ) ) / numpy.sqrt( config.ns )
+    elif config.Dimensions == 2 :
+        for q in numpy.arange( config.ns ) :
+            for r in numpy.arange( config.ns ) :
+                Listr = ( r % config.lx ) * config.u0 + ( r // config.lx ) * config.u1
+                Listq = ( q % config.lx ) * config.q0 + ( q // config.lx ) * config.q1
+                config.PhiMatrix[ q , r ] = numpy.exp( 1.0j * numpy.dot( Listq , Listr ) ) / numpy.sqrt( config.ns )

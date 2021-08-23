@@ -26,6 +26,9 @@ q0 = numpy.array( [ 0, 0, 0 ] )
 q1 = numpy.array( [ 0, 0, 0 ] )
 q2 = numpy.array( [ 0, 0, 0 ] )
 
+# PhiMatrix of q and r products
+PhiMatrix = 0
+
 # number of sites
 ns = 0
 

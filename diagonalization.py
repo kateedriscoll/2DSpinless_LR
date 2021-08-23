@@ -22,4 +22,4 @@ def Diagonalization( Ham , method ) :
     E0 = evals[ 0 ]
     Psi0 = evecs[ :, 0 ]
 
-    return E0, Psi0
+    return E0, Psi0, evals, evecs
