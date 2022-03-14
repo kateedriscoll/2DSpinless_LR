@@ -30,6 +30,7 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.R0 , config.R1 )[ 2 ]
         # linear size
         config.lx = config.ns
+        config.ly = 0
 
     elif d==2 and z==4 :
         print("2d square lattice, coordination number: " , z )
@@ -52,6 +53,7 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.T0 , config.T1 )[ 2 ]
         # linear size
         config.lx = config.ns // config.nx
+        config.ly = config.ns // config.nx
 
     elif d==2 and z==6 :
         print("2d triangular lattice, coordination number: " , z )
@@ -74,6 +76,8 @@ def CreateLattice( nx, d, z ) :
         config.ns = numpy.cross( config.T0 , config.T1 )[ 2 ]
         # linear size
         config.lx = config.ns // config.nx
+        config.ly = config.ns // config.lx
+        print( "lx: ", config.lx, " ly: ", config.ly )
     else :
         print("have not set up this lattice type yet")
         sys.exit()
@@ -179,7 +183,8 @@ def CreateEwald() :
         for s0 in numpy.arange( config.ns ):
             for s1 in numpy.arange( config.ns ):
                 if s1 != s0 :
-                    MatrixDist[ s0, s1 ] = config.InvDist[ ( s1 - s0 ) % config.ns ]
+                    config.MatrixDist[ s0, s1 ] = config.InvDist[ numpy.abs( s1 - s0 ) ]
+                    #config.MatrixDist[ s0, s1 ] = config.InvDist[ ( s1 - s0 ) % config.ns ]
     elif config.Dimensions == 2 :
         for s0 in numpy.arange( config.ns ):
             for s1 in numpy.arange( config.ns ):
@@ -198,3 +203,30 @@ def CreateBasis( np ) :
     FullHilbertSpace = numpy.array( list( product( (0,1) , repeat = config.ns )  ) )
     # reduce the size of the Hilbert space to fixed particle sector
     config.Basis = FullHilbertSpace[ numpy.where( numpy.sum( FullHilbertSpace[ : ] , axis=1 ) == config.np ) ]
+
+# create suffix for storing all data in consistent manner
+def CreateSuffix( V, NFluxes ) :
+    if config.Dimensions == 1 :
+        config.Suffix = "_" + str( config.Dimensions ) + "d_z" + str( config.Connectivity ) + "_nx" + str( config.nx ) + "_ns" + str( config.ns) + "_np" + str( config.np ) + "_a" + str( config.Alpha ) + "_V" + str( V ) + "_NFlux" + str( NFluxes ) + ".dat"
+    elif config.Dimensions == 2 :
+        config.Suffix = "_" + str( config.Dimensions ) + "d_z" + str( config.Connectivity ) + "_nx" + str( config.nx ) + "_ns" + str( config.ns) + "_np" + str( config.np ) + "_a" + str( config.Alpha ) + "_V" + str( V ) + "_NFlux" + str( NFluxes*NFluxes ) + ".dat"
+    else :
+        print("Wrong dimensions to create file names")
+        sys.exit()
+
+# create Phi matrix containing ikr
+def CreatePhiMatrix() :
+    # define r and q lists
+    config.PhiMatrix = numpy.zeros( ( config.ns , config.ns ) , dtype = 'complex128' )
+    if config.Dimensions == 1 :
+        for q in numpy.arange( config.ns ) :
+            for r in numpy.arange( config.ns ) :
+                Listr = ( r % config.lx ) * config.u0
+                Listq = ( q % config.lx ) * config.q0
+                config.PhiMatrix[ q , r ] = numpy.exp( 1.0j * numpy.dot( Listq , Listr ) ) / numpy.sqrt( config.ns )
+    elif config.Dimensions == 2 :
+        for q in numpy.arange( config.ns ) :
+            for r in numpy.arange( config.ns ) :
+                Listr = ( r % config.lx ) * config.u0 + ( r // config.lx ) * config.u1
+                Listq = ( q % config.lx ) * config.q0 + ( q // config.lx ) * config.q1
+                config.PhiMatrix[ q , r ] = numpy.exp( 1.0j * numpy.dot( Listq , Listr ) ) / numpy.sqrt( config.ns )
